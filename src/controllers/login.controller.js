@@ -1,7 +1,5 @@
-const jwt = require('jsonwebtoken');
-const { loginService } = require('../services');
-
-const secret = process.env.JWT_SECRET;
+const { userService } = require('../services');
+const tokenGenerator = require('./token/tokenGenerator');
 
 const isBodyValid = (email, password) => email && password;
 
@@ -11,15 +9,12 @@ module.exports = async (req, res) => {
         if(!isBodyValid(email, password)){
             return res.status(400).json({ message: 'Some required fields are missing'})
         }
-        const user = await loginService.getByEmail(email);
+        const user = await userService.getByEmail(email);
         if(!user || user.password !== password){
             return res.status(400).json({ message: 'Invalid fields'})
         }
-        const jwtConfig = {
-            algorithm:'HS256',
-        }
-        const token = jwt.sign({ data: { id: user.id } }, secret, jwtConfig)
-        console.log(token);
+
+        const token = tokenGenerator(user)
         return res.status(200).json({ token })
     } catch (error) {
         return res.status(500).json({ message: 'Erro interno', error: error.message })
