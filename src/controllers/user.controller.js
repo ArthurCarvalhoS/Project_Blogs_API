@@ -1,8 +1,12 @@
 const { userService } = require("../services");
 const tokenGenerator = require('./token/tokenGenerator');
 
-module.exports = async (req, res) => {
-    try {
+const listUsers = async (_req, res) => {
+    const users = await userService.getUsers();
+ res.status(200).json(users)
+}
+
+const registerUser = async (req, res) => {
         const emailValidation = /\S+@\S+\.\S+/;
         const { displayName, email, password } = req.body;
         if(displayName.length < 8) {
@@ -22,10 +26,10 @@ module.exports = async (req, res) => {
 
             const token = tokenGenerator(newUser)
             return res.status(201).json({ token });
-    
-      } catch (err) {
-        res
-          .status(500)
-          .json({ message: 'Erro ao salvar o usuário no banco', error: err.message });
-      }
+}
+
+
+module.exports = {
+    registerUser,
+    listUsers,
 }
