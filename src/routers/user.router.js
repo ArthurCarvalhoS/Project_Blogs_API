@@ -5,5 +5,6 @@ const validateJWT = require('../middlewares/validateJWT')
 
 router.post('/', userController.registerUser);
 router.get('/', validateJWT, userController.listUsers);
+router.get('/:id', validateJWT, userController.getUserById);
 
 module.exports = router;

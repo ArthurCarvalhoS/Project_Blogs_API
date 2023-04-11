@@ -6,6 +6,15 @@ const listUsers = async (_req, res) => {
  res.status(200).json(users)
 }
 
+const getUserById = async (req, res) => {
+    const { id } = req.params;
+    const users = await userService.getById(id);
+    if(!users){
+        return res.status(404).json({message: 'User does not exist'});
+    }
+ res.status(200).json(users)
+}
+
 const registerUser = async (req, res) => {
         const emailValidation = /\S+@\S+\.\S+/;
         const { displayName, email, password } = req.body;
@@ -30,6 +39,7 @@ const registerUser = async (req, res) => {
 
 
 module.exports = {
-    registerUser,
     listUsers,
+    getUserById,
+    registerUser,
 }

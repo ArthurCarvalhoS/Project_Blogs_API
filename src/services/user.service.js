@@ -4,7 +4,10 @@ const getByEmail = async (email) => await User.findOne({ where: {email} });
 const getUsers = () => User.findAll({ 
     attributes: {exclude:'password'},
 });
-const getById = (userId) => User.findByPk(userId);
+const getById = (userId) => User.findOne({
+    where: {id: userId},
+    attributes: {exclude:'password'},
+});
 
     
 module.exports = {
