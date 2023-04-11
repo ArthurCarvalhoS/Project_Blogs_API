@@ -1,4 +1,9 @@
 const { categoryService } = require('../services')
+
+const listCategories = async (_req, res) => {
+    const categories = await categoryService.listCategories()
+    res.status(200).json(categories)
+}
 const registerCategory = async (req, res) => {
     const { name } = req.body;
     if(!name){
@@ -8,5 +13,6 @@ const registerCategory = async (req, res) => {
     res.status(201).json(newCategory)
 }
 module.exports = {
+    listCategories,
     registerCategory,
 }
