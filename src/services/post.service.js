@@ -11,6 +11,14 @@ const listPosts = () => BlogPost.findAll({
 ],
 })
 
+const getById = (id) => BlogPost.findAll({
+    where: { id },
+    include: [
+      { model: User, as: 'user', attributes: {exclude: 'password'} },
+      { model: Category, as: 'categories', through: { attributes: [] } }
+  ],
+  })
+
 // const createPosts = async (title, content, userId, categoryIds) => {
 //       const result = await sequelize.transaction(async (t) => {
 //       const posts = await BlogPost.create({
@@ -32,5 +40,6 @@ const listPosts = () => BlogPost.findAll({
 
 module.exports = {
     listPosts,
+    getById,
     // createPosts,
 }
