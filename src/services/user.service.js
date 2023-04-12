@@ -1,18 +1,23 @@
 const { User } = require('../models');
-const createUser = (displayName, email, password) => User.create({ display_name: displayName, email, password });
-const getByEmail = async (email) => await User.findOne({ where: {email} });
+
+const createUser = (displayName, email, password) => {
+    User.create({ displayName, email, password });
+};
+const getByEmail = (email) => User.findOne({ where: { email } });
 const getUsers = () => User.findAll({ 
-    attributes: {exclude:'password'},
+    attributes: { exclude: 'password' },
 });
 const getById = (userId) => User.findOne({
-    where: {id: userId},
-    attributes: {exclude:'password'},
+    where: { id: userId },
+    attributes: { exclude: 'password' },
 });
 
-    
+// const deleted = (userId) => User.destroy({ where: {id: userId}, as: 'user'})
+
 module.exports = {
     createUser,
     getByEmail,
     getUsers,
-    getById
-}
+    getById,
+    // deleted
+};

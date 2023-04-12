@@ -5,5 +5,5 @@ const postService = require('./post.service');
 module.exports = {
     userService,
     categoryService,
-    postService
-}
+    postService,
+};

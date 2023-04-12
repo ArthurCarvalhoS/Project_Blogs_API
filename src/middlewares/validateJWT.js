@@ -16,6 +16,6 @@ module.exports = async (req, res, next) => {
 
           next();
         } catch (_error) {
-          return res.status(401).json({ message: "Expired or invalid token" });
+          return res.status(401).json({ message: 'Expired or invalid token' });
         }
       };
