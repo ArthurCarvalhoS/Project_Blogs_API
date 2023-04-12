@@ -19,6 +19,8 @@ const getById = (id) => BlogPost.findAll({
   ],
   })
 
+  const update = (id, title, content) => BlogPost.update({title, content}, {where: {id}})
+
 // const createPosts = async (title, content, userId, categoryIds) => {
 //       const result = await sequelize.transaction(async (t) => {
 //       const posts = await BlogPost.create({
@@ -41,5 +43,6 @@ const getById = (id) => BlogPost.findAll({
 module.exports = {
     listPosts,
     getById,
+    update,
     // createPosts,
 }
