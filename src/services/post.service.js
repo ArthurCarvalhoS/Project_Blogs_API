@@ -1,5 +1,6 @@
 const { BlogPost, User, Category} = require('../models');
-// const Sequelize = require('sequelize');
+const Sequelize = require('sequelize');
+const { Op } = Sequelize;
 // const config = require('../config/config')
 // const env = process.env.NODE_ENV || 'development';
 // const sequelize = new Sequelize(config[env]);
@@ -19,7 +20,29 @@ const getById = (id) => BlogPost.findAll({
   ],
   })
 
+  const getBySearch = async (q) => {
+    const byTitle = await BlogPost.findAll({
+      where: { title: {[Op.like]: q} },
+      include: [
+        { model: User, as: 'user', attributes: {exclude: 'password'} },
+        { model: Category, as: 'categories', through: { attributes: [] } }
+      ],
+    })
+    if(byTitle.length === 0){
+      const byContent = await BlogPost.findAll({
+        where: { content: {[Op.like]: q} },
+        include: [
+          { model: User, as: 'user', attributes: {exclude: 'password'} },
+          { model: Category, as: 'categories', through: { attributes: [] } }
+        ],
+      })
+      return byContent
+    }
+    return byTitle
+  }
+
   const update = (id, title, content) => BlogPost.update({title, content}, {where: {id}})
+//   const deleted = (id) => BlogPost.destroy({where: {id}})
 
 // const createPosts = async (title, content, userId, categoryIds) => {
 //       const result = await sequelize.transaction(async (t) => {
@@ -43,6 +66,8 @@ const getById = (id) => BlogPost.findAll({
 module.exports = {
     listPosts,
     getById,
+    getBySearch,
     update,
+    // deleted,
     // createPosts,
 }
