@@ -11,8 +11,8 @@ module.exports = async (req, res, next) => {
       }
         try {
           const decoded = jwt.verify(token, secret);
-          const user = await userService.getById(decoded.data.id);
-          req.user = user;
+          // console.log(decoded, 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+          req.user = decoded.data;
 
           next();
         } catch (_error) {

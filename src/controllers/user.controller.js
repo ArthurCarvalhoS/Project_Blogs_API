@@ -36,17 +36,18 @@ return res.status(400).json({ message: '"password" length must be at least 6 cha
             const token = tokenGenerator(newUser);
             return res.status(201).json({ token });
 };
-// const deleteUser = async (req, res) => {
-//     try {const { id } = req.user
-//     await userService.deleted(id)
-// res.status(204).end();
-// }catch (error) {
-//     res.status(500).json({message: error.message})
-// }
-// }
+const deleteUser = async (req, res) => {
+    try {
+        const { id } = req.user
+    await userService.deleted(id)
+res.status(204).end();
+}catch (error) {
+    res.status(500).json({message: error.message})
+}
+}
 module.exports = {
     listUsers,
     getUserById,
     registerUser,
-    // deleteUser,
+    deleteUser,
 };

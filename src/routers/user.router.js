@@ -7,6 +7,6 @@ const validateJWT = require('../middlewares/validateJWT');
 router.post('/', userController.registerUser);
 router.get('/', validateJWT, userController.listUsers);
 router.get('/:id', validateJWT, userController.getUserById);
-// router.delete('/me', validateJWT, userController.deleteUser);
+router.delete('/me', validateJWT, userController.deleteUser);
 
 module.exports = router;
