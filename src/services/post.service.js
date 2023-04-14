@@ -1,10 +1,10 @@
 const Sequelize = require('sequelize');
-const { BlogPost, User, Category } = require('../models');
+const { BlogPost, User, Category, PostCategory } = require('../models');
 
 const { Op } = Sequelize;
-// const config = require('../config/config')
-// const env = process.env.NODE_ENV || 'development';
-// const sequelize = new Sequelize(config[env]);
+const config = require('../config/config')
+const env = process.env.NODE_ENV || 'development';
+const sequelize = new Sequelize(config[env]);
 
 const listPosts = () => BlogPost.findAll({
   include: [
@@ -43,7 +43,7 @@ const getById = (id) => BlogPost.findAll({
   };
 
   const update = (id, title, content) => BlogPost.update({ title, content }, { where: { id } });
-//   const deleted = (id) => BlogPost.destroy({where: {id}})
+  const deleted = (id) => BlogPost.destroy({where: {id}})
 
 // const createPosts = async (title, content, userId, categoryIds) => {
 //       const result = await sequelize.transaction(async (t) => {
@@ -55,9 +55,7 @@ const getById = (id) => BlogPost.findAll({
 //         updated: new Date(),
 //       }, { transaction: t });
 
-//       await PostCategory.create({
-//         postId: posts.id, categoryId: categoryIds
-//       }, { transaction: t });
+//       await posts.addCategories(categoryIds, { transaction: t });
 //       return posts;
 //     });
 
@@ -69,6 +67,6 @@ module.exports = {
     getById,
     getBySearch,
     update,
-    // deleted,
     // createPosts,
+    deleted,
 };

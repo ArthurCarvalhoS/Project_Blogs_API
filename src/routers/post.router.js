@@ -8,7 +8,7 @@ router.get('/', validateJWT, postController.listAll);
 router.get('/search', validateJWT, postController.listBySearch);
 router.get('/:id', validateJWT, postController.listById);
 router.put('/:id', validateJWT, postController.updatePost);
-// router.delete('/:id', validateJWT, postController.deletePost);
 // router.post('/', validateJWT, postController.registerPost);
+router.delete('/:id', validateJWT, postController.deletePost);
 
 module.exports = router;

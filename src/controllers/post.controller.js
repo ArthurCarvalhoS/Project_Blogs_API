@@ -27,10 +27,10 @@ const listBySearch = async (req, res) => {
 const updatePost = async (req, res) => {
     const { id } = req.params;
     const { title, content } = req.body;
-    const { displayName } = req.user;
+    const userId = req.user.id;
     await postService.update(id, title, content);
     const [updatedPost] = await postService.getById(id);
-    if (displayName !== updatedPost.user.displayName) {
+    if (userId !== updatedPost.user.id) {
         return res.status(401).json({ message: 'Unauthorized user' });
     }
     if (!title || !content) {
@@ -39,28 +39,23 @@ const updatePost = async (req, res) => {
     res.status(200).json(updatedPost);
 };
 
-// const deletePost = async (req, res) => {
-//     try{
-//         const { id } = req.params;
-//         const  { displayName } = req.user
-//         const [post] = await postService.getById(id)
-//         const postOwner = post.user.displayName
-//         if(displayName !== postOwner){
-//                 return res.status(201).json({ message: 'Unauthorized user'})
-//     }
-//         if(!post || post === undefined) {
-//             return res.status(404).json({ message: 'Post does not exist'})
-//         }
-//     // await postService.deleted(id)
-//     // res.status(204).end();
-//     res.status(200).json(postOwner);
-// } catch (error) {
-//     res.status(500).json({ message: error.message})
-// }
-// }
+const deletePost = async (req, res) => {
+        const { id } = req.params;
+        const userId = req.user.id;
+        const [post] = await postService.getById(id)
+        if(!post || post === undefined) {
+            return res.status(404).json({ message: 'Post does not exist'})
+        }
+        if(userId !== post.user.id){
+                return res.status(401).json({ message: 'Unauthorized user'})
+    }
+    await postService.deleted(id)
+    res.status(204).end();
+}
+
 // const registerPost = async (req, res) => {
 //     const { title, content, categoryIds } = req.body;
-//     const { id } = req.user
+//     const { id } = req.user;
 //     const posts = await postService.createPosts(title, content, id, categoryIds)
 //     res.status(201).json(posts)
 // }
@@ -70,6 +65,6 @@ module.exports = {
     listById,
     listBySearch,
     updatePost,
-    // deletePost,
+    deletePost,
     // registerPost,
 };
