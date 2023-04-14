@@ -1,4 +1,4 @@
-const { postService } = require('../services');
+const { postService, categoryService } = require('../services');
 
 const listAll = async (_req, res) => {
     const posts = await postService.listPosts();
@@ -42,23 +42,30 @@ const updatePost = async (req, res) => {
 const deletePost = async (req, res) => {
         const { id } = req.params;
         const userId = req.user.id;
-        const [post] = await postService.getById(id)
-        if(!post || post === undefined) {
-            return res.status(404).json({ message: 'Post does not exist'})
+        const [post] = await postService.getById(id);
+        if (!post || post === undefined) {
+            return res.status(404).json({ message: 'Post does not exist' });
         }
-        if(userId !== post.user.id){
-                return res.status(401).json({ message: 'Unauthorized user'})
+        if (userId !== post.user.id) {
+                return res.status(401).json({ message: 'Unauthorized user' });
     }
-    await postService.deleted(id)
+    await postService.deleted(id);
     res.status(204).end();
-}
+};
 
-// const registerPost = async (req, res) => {
-//     const { title, content, categoryIds } = req.body;
-//     const { id } = req.user;
-//     const posts = await postService.createPosts(title, content, id, categoryIds)
-//     res.status(201).json(posts)
-// }
+const registerPost = async (req, res) => {
+        const { title, content, categoryIds } = req.body;
+        if (!title || !content || !categoryIds) {
+            return res.status(400).json({ message: 'Some required fields are missing' });
+        }
+        const isCategoriesValid = await categoryService.findCategories(categoryIds);
+        if (categoryIds.length !== isCategoriesValid.count) {
+                return res.status(400).json({ message: 'one or more "categoryIds" not found' });
+            }
+            const { id } = req.user;
+            const posts = await postService.createPosts(title, content, id, categoryIds);
+            res.status(201).json(posts);
+};
 
 module.exports = {
     listAll,
@@ -66,5 +73,5 @@ module.exports = {
     listBySearch,
     updatePost,
     deletePost,
-    // registerPost,
+    registerPost,
 };

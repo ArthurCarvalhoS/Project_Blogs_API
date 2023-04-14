@@ -1,8 +1,9 @@
 const Sequelize = require('sequelize');
-const { BlogPost, User, Category, PostCategory } = require('../models');
+const { BlogPost, User, Category } = require('../models');
 
 const { Op } = Sequelize;
-const config = require('../config/config')
+const config = require('../config/config');
+
 const env = process.env.NODE_ENV || 'development';
 const sequelize = new Sequelize(config[env]);
 
@@ -43,30 +44,30 @@ const getById = (id) => BlogPost.findAll({
   };
 
   const update = (id, title, content) => BlogPost.update({ title, content }, { where: { id } });
-  const deleted = (id) => BlogPost.destroy({where: {id}})
+  const deleted = (id) => BlogPost.destroy({ where: { id } });
 
-// const createPosts = async (title, content, userId, categoryIds) => {
-//       const result = await sequelize.transaction(async (t) => {
-//       const posts = await BlogPost.create({
-//         title,
-//         content,
-//         userId,
-//         published: new Date(),
-//         updated: new Date(),
-//       }, { transaction: t });
+const createPosts = async (title, content, userId, categoryIds) => {
+      const result = await sequelize.transaction(async (t) => {
+      const posts = await BlogPost.create({
+        title,
+        content,
+        userId,
+        published: new Date(),
+        updated: new Date(),
+      }, { transaction: t });
 
-//       await posts.addCategories(categoryIds, { transaction: t });
-//       return posts;
-//     });
+      await posts.addCategories(categoryIds, { transaction: t });
+      return posts;
+    });
 
-//     return result;
-// }
+    return result;
+};
 
 module.exports = {
     listPosts,
     getById,
     getBySearch,
     update,
-    // createPosts,
+    createPosts,
     deleted,
 };

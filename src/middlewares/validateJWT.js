@@ -1,7 +1,5 @@
 const jwt = require('jsonwebtoken');
 
-const { userService } = require('../services');
-
 const secret = process.env.JWT_SECRET;
 
 module.exports = async (req, res, next) => {

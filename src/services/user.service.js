@@ -10,7 +10,7 @@ const getById = (userId) => User.findOne({
     attributes: { exclude: 'password' },
 });
 
-const deleted = (userId) => User.destroy({ where: {id: userId}, as: 'user'})
+const deleted = (userId) => User.destroy({ where: { id: userId }, as: 'user' });
 
 module.exports = {
     createUser,
